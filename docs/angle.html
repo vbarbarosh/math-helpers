@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://unpkg.com/@vbarbarosh/smcss@1.2.0/dist/reset.css" rel="stylesheet">
+    <link href="https://unpkg.com/@vbarbarosh/smcss@1.2.0/dist/sm.css" rel="stylesheet">
+    <title>Calculate an angle between two points | @vbarbarosh/math-helpers</title>
+</head>
+<body>
+
+<div id="app" class="fix-f flex-row-center">
+
+<p class="abs-tl xm">Calculate an angle between two points.</p>
+
+<div class="rel w400 h400 bs50">
+    <svg class="abs ww hh">
+        <text v-bind:x="a.x + 25" v-bind:y="a.y + 25">{{ angle.toFixed(2) }}°</text>
+        <line v-bind:x1="a.x - 999" v-bind:y1="a.y" v-bind:x2="a.x + 999" v-bind:y2="a.y" stroke="black" stroke-dasharray="5,5" />
+        <line v-bind:x1="a.x" v-bind:y1="a.y" v-bind:x2="b.x" v-bind:y2="b.y" stroke="black" />
+        <circle v-bind:cx="a.x" v-bind:cy="a.y" r="25" fill="none" stroke="black" v-bind:stroke-dasharray="dash" />
+        <circle v-on:mousedown="mousedown($event, a)" v-bind:cx="a.x" v-bind:cy="a.y" r="5" class="cur-pointer" />
+        <circle v-on:mousedown="mousedown($event, b)" v-bind:cx="b.x" v-bind:cy="b.y" r="5" class="cur-pointer" />
+    </svg>
+</div>
+
+</div>
+
+<script src="./math-helpers.js"></script>
+<script src="https://unpkg.com/jquery@3.7.1/dist/jquery.js"></script>
+<script src="https://unpkg.com/bluebird@3.7.2/js/browser/bluebird.js"></script>
+<script src="https://unpkg.com/@vbarbarosh/dd@1.8.0/dist/dd.js"></script>
+<script src="https://unpkg.com/vue@2.7.16/dist/vue.js"></script>
+<script>
+const {angle, rads_from_degs, degs_from_rads} = vb_math_helpers;
+new Vue({
+    el: '#app',
+    data: {
+        a: {x: 100, y: 100},
+        b: {x: 200, y: 200},
+    },
+    computed: {
+        dash: function () {
+            const r = 25;
+            return `${2*r*Math.PI*this.angle/360},999`;
+        },
+        angle: function () {
+            const {a, b} = this;
+            return (360 + degs_from_rads(angle(a.x, a.y, b.x, b.y))) % 360;
+        },
+    },
+    methods: {
+        mousedown: function (event, point) {
+            const {x: x0, y: y0} = point;
+            event.preventDefault();
+            dd({
+                event,
+                update: function ({dx, dy}) {
+                    point.x = x0 + dx;
+                    point.y = y0 + dy;
+                },
+            });
+        },
+    },
+});
+</script>
+
+</body>
+</html>

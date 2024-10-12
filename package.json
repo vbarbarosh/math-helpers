@@ -1,0 +1,42 @@
+{
+  "author": "Vladimir Barbarosh <vladimir.barbarosh@gmail.com>",
+  "license": "MIT",
+  "name": "@vbarbarosh/math-helpers",
+  "version": "0.0.0",
+  "description": "Math made easy",
+  "main": "src/browser.js",
+  "unpkg": "dist/browser.js",
+  "jsdelivr": "dist/browser.js",
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "build": "webpack",
+    "test": "mocha src/*.test.js"
+  },
+  "keywords": [
+    "math",
+    "transform",
+    "matrix",
+    "scale",
+    "rotate",
+    "rect"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vbarbarosh/math-helpers.git"
+  },
+  "bugs": {
+    "url": "https://github.com/vbarbarosh/math-helpers/issues"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.25.7",
+    "babel-loader": "^9.2.1",
+    "mocha": "^10.7.3",
+    "webpack-cli": "^5.1.4"
+  },
+  "browserslist": [
+    "> 0.25%, not dead",
+    "IE >= 9"
+  ]
+}

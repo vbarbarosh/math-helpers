@@ -1,1 +1,1 @@
-A set of function to perform transformations
+Math made easy.

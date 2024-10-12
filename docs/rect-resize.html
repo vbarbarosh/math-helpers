@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://unpkg.com/@vbarbarosh/smcss@1.2.0/dist/reset.css" rel="stylesheet">
+    <link href="https://unpkg.com/@vbarbarosh/smcss@1.2.0/dist/sm.css" rel="stylesheet">
+    <title>Calculate bounding box for an array of points | @vbarbarosh/math-helpers</title>
+</head>
+<body>
+
+<div id="app" class="fix-f flex-row-center">
+
+<div class="rel w400 h400 bs50">
+    <div class="rainbow">
+        <div v-for="r in rects" v-bind:style="{top: px(r.y), left: px(r.x), width: px(r.w), height: px(r.h)}" class="abs"></div>
+    </div>
+    <svg ref="svg" v-on:dblclick="dblclick" class="abs ww hh">
+        <rect v-for="r in rects"
+              v-bind:x="r.x"
+              v-bind:y="r.y"
+              v-bind:width="r.w"
+              v-bind:height="r.h"
+              v-bind:transform="`rotate(${r.degs})`"
+              fill="none"
+              stroke="black"
+              stroke-dasharray="5,5" />
+    </svg>
+</div>
+
+</div>
+
+<script src="./math-helpers.js"></script>
+<script src="https://unpkg.com/jquery@3.7.1/dist/jquery.js"></script>
+<script src="https://unpkg.com/bluebird@3.7.2/js/browser/bluebird.js"></script>
+<script src="https://unpkg.com/@vbarbarosh/dd@1.8.0/dist/dd.js"></script>
+<script src="https://unpkg.com/vue@2.7.16/dist/vue.js"></script>
+<script>
+const {points_bbox} = vb_math_helpers;
+Vue.mixin({
+    methods: {
+        px,
+    },
+});
+new Vue({
+    el: '#app',
+    data: {
+        rects: [
+            {x: 100, y: 100, w: 100, h: 50, degs: 0},
+            {x: 225, y: 100, w: 100, h: 50, degs: 0},
+            {x: 100, y: 200, w: 100, h: 50, degs: 45},
+            {x: 300, y: 200, w: 100, h: 50, degs: 90},
+            {x: 500, y: 300, w: 100, h: 50, degs: 180},
+            {x: 500, y: 450, w: 100, h: 50, degs: 270},
+        ],
+    },
+    computed: {
+        bbox: function () {
+            return points_bbox(this.points);
+        },
+    },
+    methods: {
+        dblclick: function (event) {
+            if (event.target !== event.currentTarget) {
+                return;
+            }
+            const p = this.$refs.svg.createSVGPoint();
+            p.x = event.clientX;
+            p.y = event.clientY;
+            const {x, y} = p.matrixTransform(this.$refs.svg.getScreenCTM().inverse());
+            this.points.push({x, y});
+        },
+        dblclick_point: function (p) {
+            const i = this.points.indexOf(p);
+            if (i !== -1) {
+                this.points.splice(i, 1);
+            }
+        },
+        mousedown_point: function (event, point) {
+            const {x: x0, y: y0} = point;
+            event.preventDefault();
+            dd({
+                event,
+                update: function ({dx, dy}) {
+                    point.x = x0 + dx;
+                    point.y = y0 + dy;
+                },
+            });
+        },
+    },
+});
+function px(v)
+{
+    return v ? `${v}px` : '0';
+}
+</script>
+
+</body>
+</html>
