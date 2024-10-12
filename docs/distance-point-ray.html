@@ -14,7 +14,7 @@
 <div class="abs-tl xm">
     Calculate a distance between a point (x,y) and a ray (x1,y1,x2,y2)
     <br>
-    <strong>{{ result }}</strong>
+    <pre>distance_point_ray({{ n(p.x) }},{{ n(p.y) }}, {{ n(a.x) }},{{ n(a.y) }}, {{ n(b.x) }},{{ n(b.y) }}) = <b>{{ n(result) }}</b></pre>
 </div>
 <div class="rel w400 h400 bs50">
     <svg class="abs ww hh">
@@ -55,6 +55,9 @@ new Vue({
         },
     },
     methods: {
+        n: function (v) {
+            return v.toFixed(2).replace(/[.]?0+$/, '');
+        },
         mousedown: function (event, point) {
             const {x: x0, y: y0} = point;
             event.preventDefault();
