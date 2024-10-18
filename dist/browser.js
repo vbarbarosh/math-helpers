@@ -8,13 +8,17 @@ var angle = __webpack_require__(1);
 var degs_from_rads = __webpack_require__(2);
 var distance = __webpack_require__(3);
 var distance_point_ray = __webpack_require__(4);
-var points_bbox = __webpack_require__(5);
-var rads_from_degs = __webpack_require__(6);
+var point_closest_on_line = __webpack_require__(5);
+var point_closest_on_circle = __webpack_require__(6);
+var points_bbox = __webpack_require__(7);
+var rads_from_degs = __webpack_require__(8);
 module.exports = {
   angle: angle,
   degs_from_rads: degs_from_rads,
   distance: distance,
   distance_point_ray: distance_point_ray,
+  point_closest_on_circle: point_closest_on_circle,
+  point_closest_on_line: point_closest_on_line,
   points_bbox: points_bbox,
   rads_from_degs: rads_from_degs
 };
@@ -110,10 +114,73 @@ module.exports = distance_point_ray;
 /***/ (function(module) {
 
 /**
+ * Find a point on a line, closest to another point.
+ *
+ * @link http://paulbourke.net/geometry/pointlineplane/
+ * @link https://www.metanetsoftware.com/technique/tutorialA.html#section1
+ * @link https://www.youtube.com/watch?v=YbHOzJIHS1k
+ */
+function point_closest_on_line(x, y, x1, y1, x2, y2) {
+  var dx = x2 - x1;
+  var dy = y2 - y1;
+  var denom = dx * dx + dy * dy;
+
+  // 1. The only special testing for a software implementation
+  //    is to ensure that P1 and P2 are not coincident
+  //    (denominator in the equation for u is 0).
+  if (denom === 0) {
+    return {
+      x: x1,
+      y: y1
+    };
+  }
+  var u = ((x - x1) * dx + (y - y1) * dy) / denom;
+  return {
+    x: x1 + u * dx,
+    y: y1 + u * dy,
+    // 2. If the distance of the point to a line segment is
+    //    required then it is only necessary to test that u
+    //    lies between 0 and 1.
+    seg: u >= 0 && u <= 1
+  };
+}
+module.exports = point_closest_on_line;
+
+/***/ }),
+/* 6 */
+/***/ (function(module) {
+
+/**
+ * Find a point on a circle, closest to another point.
+ *
+ * @link https://stackoverflow.com/a/300894
+ */
+function point_closest_on_circle(x, y, cx, cy, radius) {
+  var dx = x - cx;
+  var dy = y - cy;
+  var len = Math.sqrt(dx * dx + dy * dy);
+  if (len === 0) {
+    return {
+      x: x,
+      y: y
+    };
+  }
+  return {
+    x: cx + dx / len * radius,
+    y: cy + dy / len * radius
+  };
+}
+module.exports = point_closest_on_circle;
+
+/***/ }),
+/* 7 */
+/***/ (function(module) {
+
+/**
  * Calculates bounding box surrounding all passed-in points.
  */
 function points_bbox(points) {
-  if (points.length == 0) {
+  if (points.length === 0) {
     return {
       x: 0,
       y: 0,
@@ -137,7 +204,7 @@ function points_bbox(points) {
   }
   var w = x1 - x0;
   var h = y1 - y0;
-  if (w == 0 || h == 0) {
+  if (w === 0 || h === 0) {
     return {
       x: 0,
       y: 0,
@@ -155,7 +222,7 @@ function points_bbox(points) {
 module.exports = points_bbox;
 
 /***/ }),
-/* 6 */
+/* 8 */
 /***/ (function(module) {
 
 /**

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://unpkg.com/@vbarbarosh/smcss@1.2.0/dist/reset.css" rel="stylesheet">
+    <link href="https://unpkg.com/@vbarbarosh/smcss@1.2.0/dist/sm.css" rel="stylesheet">
+    <title>Find a point on a circle, closest to another point | @vbarbarosh/math-helpers</title>
+</head>
+<body>
+
+<div id="app" class="fix-f flex-row-center">
+
+    <pre class="abs-l">{{ {point, circle, point2} }}</pre>
+
+    <div class="rel w400 h400 bs50">
+        <svg ref="svg" class="abs ww hh">
+            <circle v-on:mousedown="mousedown_point($event, circle)"
+                    v-bind:cx="circle.x"
+                    v-bind:cy="circle.y"
+                    v-bind:r="circle.radius"
+                    fill="white"
+                    stroke="black"
+                    class="cur-pointer" />
+            <circle v-on:mousedown="mousedown_point($event, point)"
+                    v-bind:cx="point.x"
+                    v-bind:cy="point.y"
+                    r="5"
+                    class="cur-pointer" />
+            <circle v-bind:cx="point2.x"
+                    v-bind:cy="point2.y"
+                    r="5"
+                    fill="red" />
+        </svg>
+    </div>
+
+</div>
+
+<script src="./math-helpers.js"></script>
+<script src="https://unpkg.com/jquery@3.7.1/dist/jquery.js"></script>
+<script src="https://unpkg.com/bluebird@3.7.2/js/browser/bluebird.js"></script>
+<script src="https://unpkg.com/@vbarbarosh/dd@1.8.0/dist/dd.js"></script>
+<script src="https://unpkg.com/vue@2.7.16/dist/vue.js"></script>
+<script>
+const {point_closest_on_circle} = vb_math_helpers;
+new Vue({
+    el: '#app',
+    data: {
+        point: {x: 120, y: 180},
+        circle: {x: 105, y: 75, radius: 50},
+    },
+    computed: {
+        point2: function () {
+            const {x, y} = this.point;
+            const {x: x1, y: y1, radius} = this.circle;
+            return point_closest_on_circle(x, y, x1, y1, radius);
+        },
+    },
+    methods: {
+        mousedown_point: function (event, point) {
+            const {x: x0, y: y0} = point;
+            event.preventDefault();
+            dd({
+                event,
+                update: function ({dx, dy}) {
+                    point.x = x0 + dx;
+                    point.y = y0 + dy;
+                },
+            });
+        },
+    },
+});
+</script>
+
+</body>
+</html>
