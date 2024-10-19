@@ -5,7 +5,6 @@ import matrix_translate from './matrix_translate';
 import point_rotate from './point_rotate';
 import rads_from_degs from './rads_from_degs';
 import rect_point from './rect_point';
-import rect_transform from './rect_transform';
 
 function rect_resize_matrix_nonproportional(rect, a, b, o = rect_point(rect, 0.5, 0.5))
 {

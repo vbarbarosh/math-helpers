@@ -1,9 +1,10 @@
-function rect_bbox2(r)
+function rect_bbox2(rect)
 {
-    const rads = rads_from_degs(r.degs);
-    const sin = Math.sin(rads);
-    const cos = Math.cos(rads);
-    const w = r.w*cos + r.h*sin;
-    const h = r.w*sin + r.h*cos;
-    return [r.x,r.y,w,h];
+    const sin = Math.sin(rect.rads);
+    const cos = Math.cos(rect.rads);
+    const w = rect.w*cos + rect.h*sin;
+    const h = rect.w*sin + rect.h*cos;
+    return [rect.x, rect.y, w, h];
 }
+
+module.exports = rect_bbox2;
