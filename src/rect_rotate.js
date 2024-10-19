@@ -1,12 +1,14 @@
+const point_rotate = require('./point_rotate');
+
 /**
- * Rotate a rectangle `[x,y,width,height,rads]` around origin.
+ * Rotate a rectangle `[x,y,w,h,rads]` around origin (cx,cy).
  */
-function rect_rotate(r, cx, cy, rads)
+function rect_rotate(rect, cx, cy, rads)
 {
-    const p = point_rotate(r.x, r.y, cx, cy, rads);
-    r.x = p.x;
-    r.y = p.y;
-    r.degs += degs_from_rads(rads);
+    const p = point_rotate(rect.x, rect.y, cx, cy, rads);
+    rect.x = p.x;
+    rect.y = p.y;
+    rect.rads += rads;
 }
 
 module.exports = rect_rotate;

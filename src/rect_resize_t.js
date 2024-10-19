@@ -1,15 +1,14 @@
-const rads_from_degs = require('./rads_from_degs');
 const point_rotate = require('./point_rotate');
 
-function rect_resize_t(item, dx, dy)
+function rect_resize_t(rect, dx, dy)
 {
-    const p = point_rotate(dx, dy, 0, 0, -rads_from_degs(item.transform.rotate));
-    item.height -= p.y;
+    const p = point_rotate(dx, dy, 0, 0, -rect.rads_from_degs);
+    rect.h -= p.y;
 
-    const tl = point_rotate(item.left, item.top + p.y, item.left, item.top, rads_from_degs(item.transform.rotate));
-    item.top = tl.y;
-    item.left = tl.x;
-    return item;
+    const tl = point_rotate(rect.x, rect.y + p.y, rect.x, rect.y, -rect.rads);
+    rect.x = tl.x;
+    rect.y = tl.y;
+    return rect;
 }
 
 module.exports = rect_resize_t;

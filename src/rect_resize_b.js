@@ -1,11 +1,10 @@
 const point_rotate = require('./point_rotate');
-const rads_from_degs = require('rads_from_degs');
 
-function rect_resize_b(item, dx, dy)
+function rect_resize_b(rect, dx, dy)
 {
-    const p = point_rotate(dx, dy, 0, 0, -rads_from_degs(item.transform.rotate));
-    item.height += p.y;
-    return item;
+    const p = point_rotate(dx, dy, 0, 0, -rect.rads_from_degs);
+    rect.h += p.y;
+    return rect;
 }
 
 module.exports = rect_resize_b;

@@ -1,6 +1,6 @@
-function rect_center(rotated_rect, scene_rect)
+function rect_center(rect, scene_rect)
 {
-    const r = rotated_rect;
+    const r = rect;
     const a = rotate(r.left, r.top, r.left, r.top, r.rotate);
     const b = rotate(r.left, r.top + r.height, r.left, r.top, r.rotate);
     const c = rotate(r.left + r.width, r.top, r.left, r.top, r.rotate);
